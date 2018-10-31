@@ -30,7 +30,7 @@ class ConverterJob(Job):
             src = self.payload['src']
             name = self.payload['name']
         else:
-            raise Exception("Invalid converter job")
+            raise Exception("Invalid converter job: %s", % str(self.payload))
 
         dst = DST_BASE + os.path.sep + src
         self.scripts = [Script(INSTALL_SCRIPT), Script(CONFIGURE_SCRIPT),
