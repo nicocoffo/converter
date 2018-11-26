@@ -13,7 +13,8 @@ RUN apk --update add --no-cache py3-paramiko py3-crypto git mediainfo \
   && rm -rf /var/cache/apk/* \
   && mkdir -p /opt/converter/scripts \
   && mkdir /state \
-  && mkdir /data
+  && mkdir /data \
+  && mkdir /config
 
 EXPOSE 9234
 
@@ -21,4 +22,4 @@ COPY src/ /opt/replicant
 
 WORKDIR /opt/replicant
 
-CMD ["/usr/bin/python3", "replicant.py", "--config", "/state/config.yaml"]
+CMD ["/usr/bin/python3", "replicant.py", "--config", "/config/config.yaml"]
