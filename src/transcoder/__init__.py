@@ -10,21 +10,23 @@ logger = logging.getLogger("replicant.transcoder")
 
 class Transcoder(Thread):
 
-    def __init__(self, incoming_files, finished_files, add_jobs, notifications, config):
+    def __init__(self, incoming_files, finished_files, add_jobs, noti, config):
         super().__init__()
         self.name = "replicant.transcoder"
         self.exception = None
         self.shutdown_flag = Event()
-        self.notifications = notifications
+        self.notifications = noti
 
         # Args
         self.incoming_files = incoming_files
         self.finished_files = finished_files
         self.add_jobs = add_jobs
         self.config = config
-        self.encodings = [
-            lambda s, t, i, f: LowBitRate(s,t,i,f,notifications),
-            lambda s, t, i, f: HighBitRate(s,t,i,f,notifications)]
+        self.encodings = []
+        if "720p" in config['encodings']:
+            self.encodings.append(lambda s, t, i, f: LowBitRate(s,t,i,f,noti))
+        if "1080p" in config['encodings']:
+            self.encodings.append(lambda s, t, i, f: HighBitRate(s,t,i,f,noti))
 
     def shutdown(self):
         """

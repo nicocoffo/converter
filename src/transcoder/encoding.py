@@ -102,16 +102,12 @@ class Encoding:
         bit_rate = self.bit_rate - self.audio_bit_rate
         return self.info.video().bit_rate < bit_rate
 
-        return self.info.general().overall_bit_rate > bit_rate
-
     def get_remux_args(self):
         """
         FFMPEG arguments to remux the file.
         Assumes is_remuxable returns True.
         """
         args = ["-hide_banner",
-                #"-loglevel",
-                #"fatal",
                 "-nostdin",
                 "-movflags",
                 "faststart",

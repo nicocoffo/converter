@@ -27,6 +27,7 @@ CLOUD = {
 TRANSCODER = {
         'src': '/data/original',
         'dst': '/data/optimised',
+        'encodings': ['720p', '1080p'],
         'job': {
             'pattern': 'output%03d.original',
             'tmpDir': 'remote:/transcoding',
