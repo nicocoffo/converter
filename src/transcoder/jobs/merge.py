@@ -42,6 +42,7 @@ class Merge(Job):
         # Args
         self.source = source
         self.encoding = encoding
+        self.priority = 5
 
         # Fix bases of paths
         self.target = encoding.target.replace(

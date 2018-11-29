@@ -58,6 +58,7 @@ class Remux(Job):
     def __init__(self, encoding, config):
         super().__init__(config)
         self.encoding = encoding
+        self.priority = 4
 
         # Fix bases of paths
         self.source = encoding.source.replace(

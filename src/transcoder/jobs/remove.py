@@ -19,6 +19,7 @@ class Remove(Job):
     def __init__(self, dst, config, prereqs=[]):
         super().__init__(config, prereqs=prereqs)
         self.dst = dst
+        self.priority = 0
 
         # Fill in the template
         self.name = "remove:%s" % self.dst

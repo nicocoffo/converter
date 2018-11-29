@@ -34,6 +34,7 @@ class Convert(Job):
         super().__init__(config, prereqs=prereqs)
         self.source = source
         self.encoding = encoding
+        self.priority = 8
 
         # Determine various filenames
         source_file = os.path.basename(source)
