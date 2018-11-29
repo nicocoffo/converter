@@ -1,4 +1,5 @@
 import os
+import math
 import logging
 from transcoder.jobs.remux import Remux
 from transcoder.videoInfo import VideoInfo
@@ -8,7 +9,7 @@ logger = logging.getLogger("replicant.transcoder")
 
 
 class Encoding:
-    def __init__(self, source, target, info, finished, notifications):
+    def __init__(self, source, target, info, finished, notifications, config):
         # Args
         self.source = source
         self.info = info
@@ -19,6 +20,11 @@ class Encoding:
         # Calculate the expected output
         self.target = os.path.join(target, os.path.basename(source))
         self.target = self.transform_filename(self.target)
+
+        # Segment length constants, TODO: Expose to config
+        self.seg_min = config['segmentMin']
+        self.seg_max = config['segmentMax']
+        self.parts = config['segmentParts']
 
         # Constraints
         self.constraints = [
@@ -68,7 +74,12 @@ class Encoding:
         return (out, msg)
 
     def calculate_segment_length(self):
-        return 60 * 3
+        secs = math.ceil(self.info.general().duration / (1000.0 * self.parts))
+        if secs < self.seg_min:
+            return self.seg_min
+        if secs > self.seg_max:
+            return self.seg_max
+        return secs
 
     def transform_filename(self, source):
         """
@@ -178,7 +189,7 @@ class Encoding:
         return os.path.basename(self.target)
 
 class LowBitRate(Encoding):
-    def __init__(self, source, target, info, finished, notifications):
+    def __init__(self, source, target, info, finished, notifications, config):
         # Container properties
         self.name = "720p"
         self.extension = "mp4"
@@ -199,10 +210,10 @@ class LowBitRate(Encoding):
         self.video_level = 4.1
 
         self.args = '--target 720p=1750 --mp4 --quick --720p --abr --audio-width main=stereo -H ab=192'
-        super().__init__(source, target, info, finished, notifications)
+        super().__init__(source, target, info, finished, notifications, config)
 
 class HighBitRate(Encoding):
-    def __init__(self, source, target, info, finished, notifications):
+    def __init__(self, source, target, info, finished, notifications, config):
         # Container properties
         self.name = '1080p'
         self.extension = 'mp4'
@@ -223,4 +234,4 @@ class HighBitRate(Encoding):
         self.video_level = 4.1
 
         self.args = '--target 1080p=7550 --mp4 --quick --max-height 1080 --max-width 1920 --abr --audio-width main=stereo -H ab=384'
-        super().__init__(source, target, info, finished, notifications)
+        super().__init__(source, target, info, finished, notifications, config)

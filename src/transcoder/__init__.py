@@ -24,9 +24,9 @@ class Transcoder(Thread):
         self.config = config
         self.encodings = []
         if "720p" in config['encodings']:
-            self.encodings.append(lambda s, t, i, f: LowBitRate(s,t,i,f,noti))
+            self.encodings.append(lambda s, t, i, f: LowBitRate(s,t,i,f,noti,config))
         if "1080p" in config['encodings']:
-            self.encodings.append(lambda s, t, i, f: HighBitRate(s,t,i,f,noti))
+            self.encodings.append(lambda s, t, i, f: HighBitRate(s,t,i,f,noti,config))
 
     def shutdown(self):
         """

@@ -40,8 +40,10 @@ class Convert(Job):
         source_file = os.path.basename(source)
         target_file = encoding.transform_filename(source_file)
 
+        filename = os.path.basename(encoding.source)
+
         # Fill in the template
-        self.name = "convert:%s" % target_file
+        self.name = "convert:%s:%s" % (filename, target_file)
         self.script = Template(CONVERT_SH).substitute(
             WORK_DIR=self.work_dir,
             RCLONE_ARGS=self.config["rcloneArgs"],

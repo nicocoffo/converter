@@ -28,6 +28,9 @@ TRANSCODER = {
         'src': '/data/original',
         'dst': '/data/optimised',
         'encodings': ['720p', '1080p'],
+        'segmentMin': 300,
+        'segmentMax': 1200,
+        'segmentParts': 8,
         'job': {
             'pattern': 'output%03d.original',
             'tmpDir': 'remote:/transcoding',
