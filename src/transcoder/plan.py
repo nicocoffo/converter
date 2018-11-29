@@ -18,7 +18,7 @@ class Plan:
         self.source = source
         self.target = target
         self.desired = encodings
-        self.finished = finished
+        self.callback = finished
         self.config = config
 
         # Source filename
@@ -78,7 +78,7 @@ class Plan:
                 len(self.remaining_encodings))
         self.remaining_encodings.remove(encoding)
         if len(self.remaining_encodings) == 0:
-            self.finished(self)
+            self.callback(self)
 
     def __repr__(self):
         return os.path.basename(self.source)
