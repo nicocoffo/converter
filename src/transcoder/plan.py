@@ -25,7 +25,7 @@ class Plan:
         self.filename = os.path.basename(self.source)
 
         # State
-        self.remaining_jobs = []
+        self.remaining_encodings = []
 
     def get_encodings(self):
         """
@@ -53,8 +53,10 @@ class Plan:
         jobs = []
         split = []
 
+        self.remaining_encodings = self.get_encodings()
+
         # Check if any will be remuxed
-        for enc in self.get_encodings():
+        for enc in self.remaining_encodings:
             if enc.is_remuxable():
                 jobs.append(Remux(enc, self.config['job']))
             else:
@@ -63,16 +65,19 @@ class Plan:
         # The rest will undergo a split/convert/merge workflow
         if len(split) > 0:
             jobs.append(Split(split, self.config['job']))
-
-        self.remaining_jobs = jobs
         return jobs
 
     def finished(self, encoding):
         """
         Callback to track finished jobs.
         """
-        self.remaining_jobs.remove(encoding)
-        if len(self.remaining_jobs) == 0:
+        if not encoding in self.remaining_encodings:
+            logger.warning("Attempt to finish unknown encoding: %s", encoding)
+            return
+        logger.debug("Finishing encoding %s, %d remaining", encoding,
+                len(self.remaining_encodings))
+        self.remaining_encodings.remove(encoding)
+        if len(self.remaining_encodings) == 0:
             self.finished(self)
 
     def __repr__(self):
