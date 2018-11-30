@@ -104,7 +104,7 @@ class Split(Job):
         for line in self.stdout.split("\n"):
             match = re.search("Completed (\d*)", line)
             if match:
-                num = int(match.group(1)) - 1
+                num = int(match.group(1))
                 break
         if not num:
             return self.failure()
