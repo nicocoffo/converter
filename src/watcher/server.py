@@ -13,10 +13,9 @@ def sonarr_extract(j):
     """
     if not 'eventType' in j or j['eventType'] != 'Download':
         return None
-    if not 'episodes' in j:
+    if not 'series' in j:
         return None
-    path = os.path.join(j['series']['path'], j['episodeFile']['relativePath'])
-    return { 'path': path }
+    return { 'path': j['series']['path'] }
 
 def radarr_extract(j):
     """
