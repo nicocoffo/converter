@@ -88,15 +88,15 @@ class Watcher(Thread):
             if not self.command_queue.empty():
                 cmd = self.command_queue.get()
                 if cmd and 'path' in cmd:
-                    ignore = 'cmd' in cmd and cmd['cmd'] == 'ignore'
-                    count = self.walk_directory(cmd['path'], not ignore)
+                    reattempt = 'cmd' in cmd and cmd['cmd'] == 'reattempt'
+                    count = self.walk_directory(cmd['path'], not reattempt)
                     logger.info("Request finished, %d new files found", count)
             self.collect_finished()
             time.sleep(1)
             if self.shutdown_flag.is_set():
                 return
 
-    def walk_directory(self, directory, skip_done=True):
+    def walk_directory(self, directory, skip_finished=True):
         """
         Walk the directory, collecting any new files.
         """
@@ -104,9 +104,9 @@ class Watcher(Thread):
         for root, dirs, files in os.walk(directory):
             for filename in files:
                 source = os.path.join(root, filename)
-                if skip_done and source in self.finished_set:
+                if skip_finished and source in self.finished_set:
                     logger.debug("Ignoring finished file: %s", filename)
-                elif skip_done and source in self.seen_set:
+                elif source in self.seen_set:
                     logger.debug("Ignoring seen file: %s", filename)
                 else:
                     logger.debug("Adding file: %s", filename)

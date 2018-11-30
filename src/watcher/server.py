@@ -2,9 +2,21 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from threading import Thread
 import logging
 import json
+import os
 
 logger = logging.getLogger("replicant.watcher")
 
+
+def sonarr_extract(j):
+    """
+    Convert a sonarr webhook into the expected format.
+    """
+    if not 'eventType' in j or j['eventType'] != 'Download':
+        return None
+    if not 'episodes' in j:
+        return None
+    path = os.path.join(j['series']['path'], j['episodeFile']['relativePath'])
+    return { 'cmd': 'reattempt', 'path': path }
 
 def run_server(port, queue):
     class Server(BaseHTTPRequestHandler):
@@ -19,8 +31,14 @@ def run_server(port, queue):
         def do_POST(self):
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
+            logger.info("Post: %s", post_data)
             try:
-                queue.put(json.loads(post_data))
+                j = json.loads(post_data)
+                sonarr = sonarr_extract(j)
+                if sonarr:
+                    queue.put(sonarr)
+                else:
+                    queue.put(j)
             except:
                 logging.error("Bad request")
             self._set_response()
