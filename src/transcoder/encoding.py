@@ -66,7 +66,7 @@ class Encoding:
         out = False
         if msg == "":
             # Compare lengths
-            delta = abs(self.info.video().duration - info.video().duration)
+            delta = abs(self.info.general().duration - info.general().duration)
             out = delta <= 10000
             if out:
                 msg = "Valid encoding"
