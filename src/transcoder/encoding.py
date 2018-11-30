@@ -21,7 +21,7 @@ class Encoding:
         self.target = os.path.join(target, os.path.basename(source))
         self.target = self.transform_filename(self.target)
 
-        # Segment length constants, TODO: Expose to config
+        # Segment length constants
         self.seg_min = config['segmentMin']
         self.seg_max = config['segmentMax']
         self.parts = config['segmentParts']
@@ -65,8 +65,13 @@ class Encoding:
 
         out = False
         if msg == "":
-            out = True
-            msg = "Valid encoding"
+            # Compare lengths
+            delta = abs(self.info.video().duration - info.video().duration)
+            out = delta <= 10000
+            if out:
+                msg = "Valid encoding"
+            else:
+                msg = "Durations differ by more than 10 seconds"
 
         if detailed:
             msg += "\n" + info.report()

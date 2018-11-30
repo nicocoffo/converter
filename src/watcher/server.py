@@ -16,7 +16,18 @@ def sonarr_extract(j):
     if not 'episodes' in j:
         return None
     path = os.path.join(j['series']['path'], j['episodeFile']['relativePath'])
-    return { 'cmd': 'reattempt', 'path': path }
+    return { 'path': path }
+
+def radarr_extract(j):
+    """
+    Convert a radarr webhook into the expected format.
+    """
+    if not 'eventType' in j or j['eventType'] != 'Download':
+        return None
+    if not 'movieFile' in j:
+        return None
+    path = j['movieFile']['path']
+    return { 'path': path }
 
 def run_server(port, queue):
     class Server(BaseHTTPRequestHandler):
