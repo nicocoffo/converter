@@ -220,23 +220,29 @@ class LowBitRate(Encoding):
 class HighBitRate(Encoding):
     def __init__(self, source, target, info, finished, notifications, config):
         # Container properties
-        self.name = '1080p'
         self.extension = 'mp4'
-        self.bit_rate = 8000000
         self.bit_rate_buffer = 50000
         self.media_type = 'video/mp4'
 
+        if info.resolution() > 720 * 1280:
+            self.name = '1080p'
+            self.bit_rate = 8000000
+            self.video_resolution = 1080 * 1920
+        else:
+            self.name = '720p-hb'
+            self.bit_rate = 4000000
+            self.video_resolution = 720 * 1280
+
         # Audio properties
-        self.audio_bit_rate = 384000
+        self.audio_bit_rate = 320000
         self.audio_channels = 2
         self.audio_format = 'AAC'
 
         # Video properties
         self.video_bit_rate = self.bit_rate - self.bit_rate_buffer - self.audio_bit_rate
         self.video_bit_depth = 8
-        self.video_resolution = 1080 * 1920
         self.video_format = 'AVC'
         self.video_level = 4.1
 
-        self.args = '--target 1080p=7550 --mp4 --quick --max-height 1080 --max-width 1920 --abr --audio-width main=stereo -H ab=384'
+        self.args = '--target 1080p=7630 --target 720p=3630 --mp4 --quick --max-height 1080 --max-width 1920 --abr --audio-width main=stereo -H ab=384'
         super().__init__(source, target, info, finished, notifications, config)
