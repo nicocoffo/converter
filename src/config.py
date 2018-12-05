@@ -6,7 +6,8 @@ WATCHER = {
         'loopDelay': 1200,
         'backupPath': '/state/finished.gz',
         'root': '/data/original',
-        'port': 9234
+        'port': 9234,
+        'maxQueued': 4
         }
 
 SCHEDULER = {

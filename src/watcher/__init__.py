@@ -113,6 +113,8 @@ class Watcher(Thread):
                     self.new.put(source)
                     self.seen_set[source] = True
                     count += 1
+            if count >= self.config['maxQueued']:
+                return count
             if self.shutdown_flag.is_set():
                 return count
         return count
