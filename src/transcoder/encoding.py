@@ -196,7 +196,7 @@ class Encoding:
 class LowBitRate(Encoding):
     def __init__(self, source, target, info, finished, notifications, config):
         # Container properties
-        self.name = "720p"
+        self.name = "LOW-720p"
         self.extension = "mp4"
         self.bit_rate = 2000000
         self.bit_rate_buffer = 50000
@@ -214,7 +214,7 @@ class LowBitRate(Encoding):
         self.video_format = 'AVC'
         self.video_level = 4.1
 
-        self.args = '--target 720p=1750 --mp4 --quick --720p --abr --audio-width main=stereo -H ab=192'
+        self.args = '--target 720p=1750 --mp4 --quick --720p --abr --audio-width main=stereo -H ab=128'
         super().__init__(source, target, info, finished, notifications, config)
 
 class HighBitRate(Encoding):
@@ -225,11 +225,11 @@ class HighBitRate(Encoding):
         self.media_type = 'video/mp4'
 
         if info.resolution() > 720 * 1280:
-            self.name = '1080p'
+            self.name = 'HIGH-1080p'
             self.bit_rate = 8000000
             self.video_resolution = 1080 * 1920
         else:
-            self.name = '720p-hb'
+            self.name = 'HIGH-720p'
             self.bit_rate = 4000000
             self.video_resolution = 720 * 1280
 
@@ -238,11 +238,31 @@ class HighBitRate(Encoding):
         self.audio_channels = 2
         self.audio_format = 'AAC'
 
+        delta = self.bit_rate_buffer + self.audio_bit_rate
+
         # Video properties
-        self.video_bit_rate = self.bit_rate - self.bit_rate_buffer - self.audio_bit_rate
+        self.video_bit_rate = self.bit_rate - delta
         self.video_bit_depth = 8
         self.video_format = 'AVC'
         self.video_level = 4.1
 
-        self.args = '--target 1080p=7630 --target 720p=3630 --mp4 --quick --max-height 1080 --max-width 1920 --abr --audio-width main=stereo -H ab=384'
+        # Args to converter script
+        self.args = [
+                '--target',
+                '1080p=' + str(8000000 - delta),
+                '--target',
+                '720p=' + str(4000000 - delta),
+                '--mp4',
+                '--quick',
+                '--max-height',
+                '1080',
+                '--max-width',
+                '1920',
+                '--abr',
+                '--audio-width',
+                'main=stereo',
+                '-H',
+                'ab=' + str(self.audio_bit_rate)]
+        self.args = " ".join(self.args)
+
         super().__init__(source, target, info, finished, notifications, config)
