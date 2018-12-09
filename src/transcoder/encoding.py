@@ -132,9 +132,9 @@ class Encoding:
                 "-map_chapters",
                 "-1",
                 "-map",
-                "0:v:" + self.info.video().stream_identifier,
+                "0:v:" + str(self.info.video().stream_identifier),
                 "-map",
-                "0:a:" + self.info.audio().stream_identifier,
+                "0:a:" + str(self.info.audio().stream_identifier),
                 "-sn",
                 "-dn",
                 "-c:v",
@@ -249,9 +249,9 @@ class HighBitRate(Encoding):
         # Args to converter script
         self.args = [
                 '--target',
-                '1080p=' + str(8000000 - delta),
+                '1080p=' + str(int((8000000 - delta)/1000)),
                 '--target',
-                '720p=' + str(4000000 - delta),
+                '720p=' + str(int((4000000 - delta)/1000)),
                 '--mp4',
                 '--quick',
                 '--max-height',
@@ -262,7 +262,7 @@ class HighBitRate(Encoding):
                 '--audio-width',
                 'main=stereo',
                 '-H',
-                'ab=' + str(self.audio_bit_rate)]
+                'ab=' + str(int(self.audio_bit_rate/1000))]
         self.args = " ".join(self.args)
 
         super().__init__(source, target, info, finished, notifications, config)
