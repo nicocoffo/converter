@@ -16,11 +16,14 @@ rclone $RCLONE_ARGS mkdir "$RCLONE_TARGET"
 rclone $RCLONE_ARGS copy --include *.srt "$RCLONE_SOURCE" "$WORK_DIR"
 for SUBFILE in "$WORK_DIR"/*.srt
 do
-  E="$${SUBFILE##*.}"
-  REST="$${SUBFILE%.*}"
-  L="$${REST##*.}"
-  mv "$$SUBFILE" "$SUB_BASE.$$L.$$E"
-  rclone $RCLONE_ARGS copy "$SUB_BASE.$$L.$$E" "$RCLONE_TARGET"
+  if [ -e "$$SUBFILE" ]
+  then
+    E="$${SUBFILE##*.}"
+    REST="$${SUBFILE%.*}"
+    L="$${REST##*.}"
+    mv "$$SUBFILE" "$SUB_BASE.$$L.$$E"
+    rclone $RCLONE_ARGS copy "$SUB_BASE.$$L.$$E" "$RCLONE_TARGET"
+  fi
 done
 
 rclone $RCLONE_ARGS copy --include $PATTERN "$RCLONE_SOURCE" "$WORK_DIR"
