@@ -115,6 +115,8 @@ class Encoding:
         """
         if self.info.resolution() > self.video_resolution:
             return False
+        if self.info.level() > self.video_level:
+            return False
         bit_rate = self.bit_rate - self.audio_bit_rate
         return self.info.video().bit_rate < bit_rate
 
@@ -212,7 +214,7 @@ class LowBitRate(Encoding):
         self.video_bit_depth = 8
         self.video_resolution = 720 * 1280
         self.video_format = 'AVC'
-        self.video_level = 4.1
+        self.video_level = 4.2
 
         self.args = '--target 720p=1750 --mp4 --quick --720p --abr --audio-width main=stereo -H ab=128'
         super().__init__(source, target, info, finished, notifications, config)
@@ -244,7 +246,7 @@ class HighBitRate(Encoding):
         self.video_bit_rate = self.bit_rate - delta
         self.video_bit_depth = 8
         self.video_format = 'AVC'
-        self.video_level = 4.1
+        self.video_level = 4.2
 
         # Args to converter script
         self.args = [
