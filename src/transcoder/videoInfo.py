@@ -70,8 +70,8 @@ class VideoInfo:
 
         # Sort by respective keys
         sorted(self.videoList, key=lambda t: t.width * t.height, reverse=True)
-        sorted(self.audioList, key=lambda t: t.bit_rate, reverse=True)
-        sorted(self.textList, key=lambda t: 0 if not t.bit_rate else t.bit_rate, reverse=True)
+        sorted(self.audioList, key=lambda t: 0 if not t.bit_rate else int(t.bit_rate), reverse=True)
+        sorted(self.textList, key=lambda t: 0 if not t.bit_rate else int(t.bit_rate), reverse=True)
 
         # Find matching language for audio
         lang_match = []
