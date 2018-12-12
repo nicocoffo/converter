@@ -65,13 +65,13 @@ class VideoInfo:
         self.audioList = [t for t in self.info.tracks if t.track_type == 'Audio']
         self.textList = [t for t in self.info.tracks if t.track_type == 'Text']
 
-        if len(self.videoList) == 0:
-            raise Exception("Not a video file")
+        assert len(self.videoList) == 1, "Multiple or no video tracks in input"
+        assert len(self.generalList) == 1, "Multiple or no general tracks in input"
 
         # Sort by respective keys
         sorted(self.videoList, key=lambda t: t.width * t.height, reverse=True)
         sorted(self.audioList, key=lambda t: t.bit_rate, reverse=True)
-        sorted(self.textList, key=lambda t: t.bit_rate, reverse=True)
+        sorted(self.textList, key=lambda t: 0 if not t.bit_rate else t.bit_rate, reverse=True)
 
         # Find matching language for audio
         lang_match = []
@@ -98,8 +98,6 @@ class VideoInfo:
         self.audioTracks = len(self.audioList)
         self.textTracks = len(self.textList)
 
-        assert len(self.videoList) == 1, "Multiple or no video tracks in input"
-        assert len(self.generalList) == 1, "Multiple or no general tracks in input"
 
     def general(self):
         """
