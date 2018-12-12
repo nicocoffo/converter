@@ -1,3 +1,4 @@
+import time
 import string
 import traceback
 import smtplib
@@ -5,7 +6,6 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 from plexapi.myplex import MyPlexAccount
-from threading import Timer
 
 ExceptionTemplate = string.Template(
 """Server encountered an exception during execution:
@@ -44,5 +44,9 @@ class Notifications:
         self.send(subject, msg)
 
     def update_services(self, target):
-        Timer(20, plex_scan, args=[self.plex])
-        return "Plex updated"
+        time.sleep(20)
+        try:
+            plex_scan(self.plex)
+            return "Plex updated"
+        except Exception as e:
+            return e.msg

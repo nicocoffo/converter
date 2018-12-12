@@ -164,11 +164,12 @@ class Encoding:
         (valid, report) = self.validate(detailed=True)
         if valid:
             service = self.notifications.update_services(self.target)
+            subject = "Successful Encoding: %s" % self
         else:
             service = "Bad encoding, not done"
+            subject = "Bad Encoding: %s" % self
 
         # Send a notification with details thus far
-        subject = "Successful Encoding: %s" % self
         msg = SuccessReport.substitute(
             source=self.source,
             target=self.target,
