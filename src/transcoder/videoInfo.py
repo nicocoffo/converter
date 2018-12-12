@@ -65,6 +65,9 @@ class VideoInfo:
         self.audioList = [t for t in self.info.tracks if t.track_type == 'Audio']
         self.textList = [t for t in self.info.tracks if t.track_type == 'Text']
 
+        if len(self.videoList) == 0:
+            raise Exception("Not a video file")
+
         # Sort by respective keys
         sorted(self.videoList, key=lambda t: t.width * t.height, reverse=True)
         sorted(self.audioList, key=lambda t: t.bit_rate, reverse=True)

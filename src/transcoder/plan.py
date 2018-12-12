@@ -32,7 +32,11 @@ class Plan:
         Determine the necessary outputs for this file, given the
         the plan's desired encodings.
         """
-        info = VideoInfo(self.source)
+        try:
+            info = VideoInfo(self.source)
+        except:
+            logger.warning("Failed to get video info for %s", self.filename)
+            return []
 
         encodings = []
         for enc in self.desired:
