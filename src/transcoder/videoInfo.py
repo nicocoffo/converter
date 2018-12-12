@@ -85,7 +85,7 @@ class VideoInfo:
         lang_match = []
         lang_other = []
         for t in self.textList:
-            if lang in languages(a):
+            if lang in languages(t):
                 lang_match.append(t)
             else:
                 lang_other.append(t)
