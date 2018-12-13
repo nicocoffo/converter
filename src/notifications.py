@@ -16,7 +16,7 @@ $trace""")
 def plex_scan(config):
     account = MyPlexAccount(config['username'], config['password'])
     plex = account.resource(config['server']).connect()
-    if len(plex.sessions() == 0):
+    if len(plex.sessions()) == 0:
         plex.library.refresh()
 
 class Notifications:
