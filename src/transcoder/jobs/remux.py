@@ -23,7 +23,7 @@ then
   rclone $RCLONE_ARGS copy "$SUB_BASE.$SUB_LANG.srt" "$RCLONE_TARGET"
 fi
 
-SUBS=$$(ffprobe -v error -show_entries stream=index:stream_tags=language:stream=codec_name -select_streams s -of compact=p=0:nk=1 "$ORIGINAL_FILE" | grep -v pgs)
+SUBS=$$(ffprobe -v error -show_entries stream=index:stream_tags=language:stream=codec_name -select_streams s -of compact=p=0:nk=1 "$ORIGINAL_FILE" | grep -v pgs || true)
 for L in $$(echo "$$SUBS" | cut -d '|' -f 3 | sort | uniq)
 do
   NUM=1
