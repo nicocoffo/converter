@@ -64,5 +64,6 @@ if __name__ == '__main__':
     logging.basicConfig(level=level, format=config['logFormat'])
     logging.getLogger("paramiko").setLevel(logging.CRITICAL)
     logging.getLogger("urllib3").setLevel(logging.CRITICAL)
+    logging.getLogger("plexapi").setLevel(logging.CRITICAL)
 
     main(config)
