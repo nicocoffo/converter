@@ -9,7 +9,7 @@ export PATH="$$PATH:/opt/rclone/:/opt/video_transcoding/bin/"
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
 
-rm -rf "$WORK_DIR"
+rm -rf /tmp/jackhammer*
 mkdir -p "$WORK_DIR"
 rclone $RCLONE_ARGS mkdir "$RCLONE_TARGET"
 
