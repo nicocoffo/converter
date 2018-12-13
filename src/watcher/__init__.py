@@ -80,7 +80,7 @@ class Watcher(Thread):
         Watch the root directory, collecting any new files.
         Then delays, collecting files promoted to finished.
         """
-        count = self.walk_directory(self.config['root'])
+        count = self.walk_directory(self.config['root'], limit=self.config['maxQueued'])
         logger.info("Watcher finished, %d new files found", count)
 
         start = time.time()
@@ -96,7 +96,7 @@ class Watcher(Thread):
             if self.shutdown_flag.is_set():
                 return
 
-    def walk_directory(self, directory, skip_finished=True):
+    def walk_directory(self, directory, skip_finished=True, limit=-1):
         """
         Walk the directory, collecting any new files.
         """
@@ -113,7 +113,7 @@ class Watcher(Thread):
                     self.new.put(source)
                     self.seen_set[source] = True
                     count += 1
-            if count >= self.config['maxQueued']:
+            if limit > 0 and count >= limit: 
                 return count
             if self.shutdown_flag.is_set():
                 return count

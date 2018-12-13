@@ -16,7 +16,8 @@ $trace""")
 def plex_scan(config):
     account = MyPlexAccount(config['username'], config['password'])
     plex = account.resource(config['server']).connect()
-    plex.library.refresh()
+    if len(plex.sessions() == 0):
+        plex.library.refresh()
 
 class Notifications:
     def __init__(self, config):
@@ -44,7 +45,6 @@ class Notifications:
         self.send(subject, msg)
 
     def update_services(self, target):
-        time.sleep(20)
         try:
             plex_scan(self.plex)
             return "Plex updated"

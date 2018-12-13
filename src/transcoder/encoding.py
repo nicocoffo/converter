@@ -1,6 +1,7 @@
 import os
 import math
 import logging
+import time
 from transcoder.jobs.remux import Remux
 from transcoder.videoInfo import VideoInfo
 from transcoder.templates import SuccessReport, FailureReport
@@ -159,6 +160,9 @@ class Encoding:
         Verify the produced file is valid and run the callback.
         """
         self.finished(self)
+
+        # Wait for the cache to update
+        time.sleep(15)
 
         # Verify the output is valid
         (valid, report) = self.validate(detailed=True)
