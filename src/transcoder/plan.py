@@ -35,7 +35,7 @@ class Plan:
         try:
             info = VideoInfo(self.source)
         except Exception as e:
-            logger.warning("Failed to get video info for %s: %s", self.filename, e.msg)
+            logger.warning("Failed to get video info for %s: %s", self.filename, str(e))
             return []
 
         encodings = []
