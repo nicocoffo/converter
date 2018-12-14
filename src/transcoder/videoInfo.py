@@ -49,6 +49,19 @@ def languages(track):
         lang.extend(track.other_language)
     return lang
 
+def bitrate(track):
+    if not track.bit_rate:
+        return 0.0
+
+    if isinstance(track.bit_rate, int) or isinstance(track.bit_rate, float):
+        return float(track.bit_rate)
+    elif isinstance(track.bit_rate, str):
+        if '/' in track.bit_rate:
+            num = track.bit_rate.split('/')
+            return float(num[0])
+        else:
+            return float(track.bit_rate)
+
 class VideoInfo:
     """
     Abstraction over MediaInfo, to assist in selecting tracks.
@@ -70,8 +83,8 @@ class VideoInfo:
 
         # Sort by respective keys
         sorted(self.videoList, key=lambda t: t.width * t.height, reverse=True)
-        sorted(self.audioList, key=lambda t: 0 if not t.bit_rate else int(t.bit_rate), reverse=True)
-        sorted(self.textList, key=lambda t: 0 if not t.bit_rate else int(t.bit_rate), reverse=True)
+        sorted(self.audioList, key=lambda t: bitrate(t), reverse=True)
+        sorted(self.textList, key=lambda t: bitrate(t), reverse=True)
 
         # Find matching language for audio
         lang_match = []
@@ -124,6 +137,12 @@ class VideoInfo:
         Sorted to place the best first.
         """
         return self.textList[track]
+
+    def get_video_bitrate(self):
+        return bitrate(self.video())
+
+    def get_audio_bitrate(self, track=0):
+        return bitrate(self.audio(track))
 
     def get_audio_lang(self, track=0):
         """

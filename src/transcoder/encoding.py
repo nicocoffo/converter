@@ -118,7 +118,7 @@ class Encoding:
             return False
         if self.info.level() > self.video_level:
             return False
-        return self.info.video().bit_rate < self.video_bit_rate
+        return self.info.get_video_bitrate() < self.video_bit_rate
 
     def get_remux_args(self):
         """
