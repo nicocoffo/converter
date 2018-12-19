@@ -160,8 +160,10 @@ class Encoding:
         """
         self.finished(self)
 
-        # Wait for the cache to update
-        time.sleep(15)
+        # Wait for the file to exist
+        start = time.time()
+        while (time.time() - start) < 120 and not os.path.isfile(self.target):
+            time.sleep(5)
 
         # Verify the output is valid
         (valid, report) = self.validate(detailed=True)
