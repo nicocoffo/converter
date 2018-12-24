@@ -168,7 +168,9 @@ class VideoInfo:
         return self.video().width * self.video().height
 
     def level(self):
-        return float(self.video().format_profile.split('@L')[1])
+        for level in self.video().format_profile.split('@'):
+            if level.startswith('L'):
+                return float(level[1:])
 
     def report(self):
         msg = ""
