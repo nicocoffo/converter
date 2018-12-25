@@ -19,12 +19,15 @@ def plex_scan(config):
     if len(plex.sessions()) == 0:
         plex.library.refresh()
 
+MAX_LEN = 500
+
 class Notifications:
+
     def __init__(self, config):
         self.email = config['email']
         self.plex = config['plex']
 
-    def send(self, subject, body):
+    def __send__(self, subject, body):
         msg = MIMEMultipart()
         msg['From'] = self.email['from']
         msg['To'] = self.email['to']
@@ -36,6 +39,14 @@ class Notifications:
         server.login(self.email['username'], self.email['password'])
         server.sendmail(self.email['from'], self.email['to'], msg.as_string())
         server.quit()
+
+    def send(self, subject, body):
+        rep = 0
+        while len(body) > MAX_LEN * rep:
+            s = subject if rep == 0 else subject + ' '  + str(rep + 1)
+            b = body[MAX_LEN * rep:MAX_LEN * (rep + 1)]
+            self.__send__(s, b)
+            rep += 1
 
     def send_exception(self, e):
         subject = "Server Exception"

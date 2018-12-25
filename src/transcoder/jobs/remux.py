@@ -39,8 +39,10 @@ do
       NUM=$$((NUM+1))
       [ -f $$OUT ] || break
     done
+    set +e
     ffmpeg -i "$ORIGINAL_FILE" -hide_banner -loglevel fatal -map 0:$$SUB "$$OUT"
     rclone $RCLONE_ARGS copy "$$OUT" "$RCLONE_TARGET"
+    set -e
   done
 done
 
