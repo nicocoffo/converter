@@ -46,7 +46,7 @@ do
       [ -f $$OUT ] || break
     done
     set +e
-    ffmpeg -i "$ORIGINAL_FILE" -hide_banner -loglevel fatal -map 0:$$SUB "$$OUT"
+    ffmpeg -i "$ORIGINAL_FILE" -hide_banner -map 0:$$SUB "$$OUT"
     rclone $RCLONE_ARGS copy "$$OUT" "$RCLONE_TARGET"
     set -e
     rm "$$OUT"
