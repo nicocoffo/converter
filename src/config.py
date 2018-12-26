@@ -7,7 +7,8 @@ WATCHER = {
         'backupPath': '/state/finished.gz',
         'root': '/data/original',
         'port': 9234,
-        'maxQueued': 4
+        'maxQueued': 10,
+        'ignore': '.*\.srt$'
         }
 
 SCHEDULER = {

@@ -3,6 +3,7 @@ import time
 import traceback
 import logging
 import gzip
+import re
 from threading import Thread, Event
 from queue import Queue
 
@@ -108,6 +109,8 @@ class Watcher(Thread):
                     logger.debug("Ignoring finished file: %s", filename)
                 elif source in self.seen_set:
                     logger.debug("Ignoring seen file: %s", filename)
+                elif re.match(self.config['ignore'], filename):
+                    logger.debug("Ignoring regex match: %s", filename)
                 else:
                     logger.debug("Adding file: %s", filename)
                     self.new.put(source)

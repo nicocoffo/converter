@@ -32,10 +32,6 @@ class Plan:
         Determine the necessary outputs for this file, given the
         the plan's desired encodings.
         """
-        # Ignore .srt files
-        if self.source[-3:] == ".srt":
-            return []
-
         try:
             info = VideoInfo(self.source)
         except Exception as e:
