@@ -69,7 +69,7 @@ def extract_bit_rate(track, field):
 def get_bit_rate(track):
     fields = ['bit_rate', 'nominal_bit_rate']
     for f in fields:
-        bit_rate = extract_bit_rate(track, 'bit_rate')
+        bit_rate = extract_bit_rate(track, f)
         if bit_rate:
             return bit_rate
     return 0.0
