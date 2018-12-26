@@ -19,7 +19,7 @@ def plex_scan(config):
     if len(plex.sessions()) == 0:
         plex.library.refresh()
 
-MAX_LEN = 2000
+MAX_LEN = 100000
 
 class Notifications:
 
