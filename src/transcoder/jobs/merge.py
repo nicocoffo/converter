@@ -13,7 +13,10 @@ rm -rf /tmp/jackhammer*
 mkdir -p "$WORK_DIR"
 rclone $RCLONE_ARGS mkdir "$RCLONE_TARGET"
 
+set +e
 rclone $RCLONE_ARGS copy --include *.srt "$RCLONE_SOURCE" "$WORK_DIR"
+set -e
+
 for SUBFILE in "$WORK_DIR"/*.srt
 do
   if [ -e "$$SUBFILE" ]
