@@ -118,7 +118,7 @@ class Encoding:
             return False
         if self.info.level() > self.video_level:
             return False
-        if self.video().format != self.video_format:
+        if self.info.video().format != self.video_format:
             return False
         return self.info.get_video_bitrate() < self.video_bit_rate
 
