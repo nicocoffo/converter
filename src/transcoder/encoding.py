@@ -231,7 +231,7 @@ class HighBitRate(Encoding):
     def __init__(self, source, target, info, finished, notifications, config):
         # Container properties
         self.extension = 'mp4'
-        self.bit_rate_buffer = 50000
+        self.bit_rate_buffer = 75000
         self.media_type = 'video/mp4'
 
         if info.resolution() > 720 * 1280:
