@@ -53,8 +53,7 @@ do
   done
 done
 
-ffmpeg -i "$ORIGINAL_FILE" -map_metadata -1 -reset_timestamps 1 -c copy \
-        -map 0 -segment_time "$SEG_LEN" -f segment "$PATTERN"
+ffmpeg -i "$ORIGINAL_FILE" $FFMPEG_ARGS "$PATTERN"
 rclone $RCLONE_ARGS --exclude "$ORIGINAL_FILENAME" copy "$WORK_DIR" "$RCLONE_TARGET"
 echo "Completed $$(ls "$WORK_DIR" | grep -v ".srt$$" | grep -v "$ORIGINAL_FILENAME" | wc -l)"
 """
@@ -97,7 +96,7 @@ class Split(Job):
             PATTERN=os.path.join(self.work_dir, self.pattern),
             SUB_LANG=encodings[0].lang,
             SUB_BASE=os.path.join(self.work_dir, sub_base),
-            SEG_LEN=encodings[0].calculate_segment_length()
+            FFMPEG_ARGS=encodings[0].get_split_args()
         )
 
     def success(self):

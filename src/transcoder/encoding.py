@@ -122,6 +122,28 @@ class Encoding:
             return False
         return self.info.get_video_bitrate() < self.video_bit_rate
 
+    def get_split_args(self):
+        """
+        FFMPEG arguments to split the file.
+        """
+        args = ["-hide_banner",
+                "-nostdin",
+                "-map_metadata",
+                "-1",
+                "-reset_timestamps",
+                "1",
+                "-c",
+                "copy",
+                "-map",
+                "0:v:" + str(self.info.video().stream_identifier),
+                "-map",
+                "0:a:" + str(self.info.audio().stream_identifier),
+                "-segment_time",
+                str(self.calculate_segment_length()),
+                "-f",
+                "segment"]
+        return " ".join(args)
+
     def get_remux_args(self):
         """
         FFMPEG arguments to remux the file.

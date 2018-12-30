@@ -109,6 +109,13 @@ class VideoInfo:
         lang_match.extend(lang_other)
         self.audioList = lang_match
 
+        # Filter out any TrueHD tracks
+        noTrueHD = []
+        for a in self.audioList:
+            if a.codec_id != "A_TRUEHD":
+                noTrueHD.append(a)
+        self.audioList = noTrueHD
+
         # Find matching language for subtitles
         lang_match = []
         lang_other = []
